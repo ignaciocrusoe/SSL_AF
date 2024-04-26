@@ -18,7 +18,9 @@ typedef enum {
     C
 } t_caracter;
 
+#define ESTADO_INICIAL Q0
 #define ESTADO_FINAL Q2
+#define CENTINELA ','
 
 // Definición de la tabla de transiciones
 int tabla_transiciones[CANT_ESTADOS][CANT_SIMBOLOS] = {
@@ -48,22 +50,22 @@ t_estado char_to_enum(char c){
     }
 }
 
-// Función para verificar si la cadena es aceptada por el AFD
+// Lee caracter a caracter y aplica la funcion de transición hasta encontrar un centinela o EOF, después empieza de nuevo con el siguiente lexema
 void transicion(FILE* input, FILE* output) {
     char c;
-    int estado = 0;
+    int estado = ESTADO_INICIAL;
     while((c = fgetc(input)) != EOF){
-        if(c!=','){
+        if(c != CENTINELA){
             fputc(c, output);
             estado = tabla_transiciones[estado][char_to_enum(c)];
         }
         else{
             fputs("    ", output);
             if(estado == ESTADO_FINAL){
-                fputs("Acepatda", output);
+                fputs("Acepatda\n", output);
             }
             else{
-                 fputs("No Acepatda", output);
+                 fputs("No Acepatda\n", output);
             }
             estado = 0;
         }
@@ -80,7 +82,7 @@ void transicion(FILE* input, FILE* output) {
 int main(int argc, char* argv[]) {
 
     if(argc < 2) {
-        printf("Debe pasar un nombre de archivo como parámetro.\n");
+        printf("Debe pasarse un nombre de archivo válido como parámetro.\n");
         return EXIT_FAILURE;
     }
 
