@@ -51,7 +51,7 @@ t_estado char_to_enum(char c){
 }
 
 // Lee caracter a caracter y aplica la funcion de transición hasta encontrar un centinela o EOF, después empieza de nuevo con el siguiente lexema
-void transicion(FILE* input, FILE* output) {
+void lexer(FILE* input, FILE* output) {
     char c;
     int estado = ESTADO_INICIAL;
     while((c = fgetc(input)) != EOF){
@@ -67,10 +67,10 @@ void transicion(FILE* input, FILE* output) {
             else{
                  fputs("No Acepatda\n", output);
             }
-            estado = 0;
+            estado = ESTADO_INICIAL;
         }
     }
-    fputs("    ",output);
+    fputs("    ", output);
     if(estado == ESTADO_FINAL){
                 fputs("Acepatda", output);
             }
@@ -92,7 +92,7 @@ int main(int argc, char* argv[]) {
         return EXIT_FAILURE;
     }
     
-    transicion(file, stdout);
+    lexer(file, stdout);
 
     fclose(file);
     return EXIT_SUCCESS;
